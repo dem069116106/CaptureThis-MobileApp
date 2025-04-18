@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/commons::head"></head>
+<body>
+<header th:replace="fragments/commons::header"></header>
+<main>
+    <div class="followers-container">
+        <h1 th:text="#{followers.title}"></h1>
+        <p>
+            <strong th:text="#{followers.totalFollowers}"></strong>
+            <span th:text="${followers.size()}">Total Followers</span>
+        </p>
+
+        <section class="followers-list">
+            <div th:each="follower : ${followers}" class="follower-item">
+                <div class="result-header">
+                    <img th:src="@{/profile-picture/{userId}(userId=${follower.id})}" alt="Profile Picture"
+                         class="profile-picture-small"/>
+                    <span class="follower-name">
+            <a th:href="@{/profile/{userId}(userId=${follower.id})}"
+               th:text="${follower.firstName} + ' ' + ${follower.lastName}"
+               style="text-decoration: none; color: #333; font-weight:bold;">Full Name</a>
+          </span>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="fragments/commons::footer"></footer>
+</body>
+</html>
