@@ -10,10 +10,15 @@
 <body>
 <header>
     <nav>
+        <div class="idk">
         <div class="logo">
             <a th:href="${#authentication.name == 'anonymousUser'} ? @{/} : @{/home}">
                 <img th:src="@{/img/logo.png}" alt="CaptureThis Logo" class="logo-image"/>
             </a>
+        </div>
+        <div class="menu-toggle btn" onclick="toggleNav()">
+            <i class="fa-solid fa-bars"></i>
+        </div>
         </div>
         <div class="nav-links">
             <ul>
@@ -63,9 +68,15 @@
 <footer class="footer bg-transparent">
     <div class="container-fluid text-center">
         <div class="footer-background footer-text fixed-bottom">
-            <span th:text="#{footer.copyright}">© Daniel 2024. All rights reserved.</span>
+            <span th:text="#{footer.copyright}">© CaptureThis 2025. All rights reserved.</span>
         </div>
     </div>
 </footer>
+<script>
+    function toggleNav() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+</script>
 </body>
 </html>

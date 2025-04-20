@@ -29,14 +29,12 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final CommentService commentService;
-//    private final FavoriteService favoriteService;
     private final LikeService likeService;
 
     public PostController(PostService postService, CommentService commentService, UserService userService, LikeService likeService) {
         this.postService = postService;
         this.commentService = commentService;
         this.userService = userService;
-//        this.favoriteService = favoriteService;
         this.likeService = likeService;
     }
 
@@ -71,6 +69,7 @@ public class PostController {
             e.printStackTrace();
         }
 
+        System.out.println("Image file: " + (data.getImageFile() != null ? data.getImageFile().getOriginalFilename() : "null"));
         return "redirect:/profile";
     }
 
@@ -125,7 +124,8 @@ public class PostController {
             e.printStackTrace();
         }
 
-        return "redirect:/profile/" + postService.findById(data.getId()).getUser().getId();
+        Post post = postService.findById(data.getId());
+        return "redirect:/profile/" + post.getUser().getId();
     }
 
     @GetMapping("/delete-post/{id}")
