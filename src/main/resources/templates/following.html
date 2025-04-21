@@ -14,8 +14,10 @@
         <section class="following-list">
             <div th:each="follow : ${following}" class="following-item">
                 <div class="result-header">
+                    <div class="img_img">
                     <img th:src="@{/profile-picture/{userId}(userId=${follow.id})}" alt="Profile Picture"
                          class="profile-picture-small"/>
+                    </div>
                     <span class="follow-name">
             <a th:href="@{/profile/{userId}(userId=${follow.id})}"
                th:text="${follow.firstName} + ' ' + ${follow.lastName}"

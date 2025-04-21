@@ -7,6 +7,8 @@ import com.project.capture_this.model.entity.Post;
 import com.project.capture_this.model.entity.User;
 import com.project.capture_this.model.enums.PostStatus;
 import com.project.capture_this.repository.PostRepository;
+import com.project.capture_this.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +22,13 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
     private final CommentService commentService;
 
-    public PostService(PostRepository postRepository, UserService userService, CommentService commentService) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, UserService userService, CommentService commentService) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
         this.userService = userService;
         this.commentService = commentService;
     }
@@ -69,9 +73,20 @@ public class PostService {
     }
 
     @Transactional
-    public List<DisplayPostDTO> findDraftPosts() {
+    public List<DisplayPostDTO> findDraftPosts(Long userId) {
         User loggedUser = userService.getLoggedUser();
-        return postRepository.findByUserAndStatus(loggedUser, PostStatus.DRAFT).stream()
+        User targetUser;
+
+        if (userId != null && loggedUser.isAdmin()) {
+            // Admin is allowed to view drafts of others
+            targetUser = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        } else {
+            // Regular users or no userId param — only see their own
+            targetUser = loggedUser;
+        }
+
+        return postRepository.findByUserAndStatus(targetUser, PostStatus.DRAFT).stream()
                 .map(post -> mapToDisplayPostDTO(post, commentService))
                 .collect(Collectors.toList());
     }

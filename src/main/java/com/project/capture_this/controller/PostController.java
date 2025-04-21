@@ -81,9 +81,9 @@ public class PostController {
         return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(image);
     }
 
-    @GetMapping("/drafts")
-    public String viewDrafts(Model model) {
-        List<DisplayPostDTO> drafts = postService.findDraftPosts();
+    @GetMapping("/drafts/{userId}")
+    public String viewDrafts(@PathVariable Long userId, Model model) {
+        List<DisplayPostDTO> drafts = postService.findDraftPosts(userId);
         model.addAttribute("drafts", drafts);
         return "drafts";
     }
